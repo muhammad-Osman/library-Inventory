@@ -1,0 +1,38 @@
+{
+  "name": "express",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon src/start.ts",
+    "build": "tsc",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.9.0",
+    "@prisma/extension-accelerate": "2.0.2",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "nodemon": "^3.1.10",
+    "resend": "^6.4.1"
+  },
+  "devDependencies": {
+    "@types/express": "5.0.5",
+    "@types/jest": "^30.0.0",
+    "@types/node": "22.18.12",
+    "@types/supertest": "^6.0.3",
+    "dotenv": "^17.2.3",
+    "execa": "^9.6.0",
+    "jest": "^30.2.0",
+    "jest-environment-node": "^30.2.0",
+    "prisma": "^6.9.0",
+    "supertest": "^7.1.4",
+    "ts-jest": "^29.4.5",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.6",
+    "typescript": "^5.8.2"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  }
+}

@@ -1,0 +1,164 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum WalletMovementType {
+  SELL_REVENUE
+  BORROW_REVENUE
+  STOCK_PURCHASE
+  RESTOCK_COST
+  ADJUSTMENT
+}
+
+enum MovementDirection {
+  CREDIT
+  DEBIT
+}
+
+enum BookActionType {
+  BORROW
+  RETURN
+  BUY
+  RESTOCK_REQUESTED
+  RESTOCKED
+  REMINDER_SENT
+}
+
+enum BorrowStatus {
+  BORROWED
+  RETURNED
+  OVERDUE
+}
+
+enum TagKind {
+  AUTHOR
+  GENRE
+}
+
+model User {
+  id        Int           @id @default(autoincrement())
+  email     String        @unique
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  actions   BookAction[]
+  borrows   Borrow[]
+  movements WalletMovement[]
+}
+
+model Book {
+  id               Int            @id @default(autoincrement())
+  isbn             String         @unique
+  title            String
+  year             Int?
+  pages            Int?
+  publisher        String?
+  sellPrice        Decimal        @db.Decimal(10, 2)
+  stockPrice       Decimal        @db.Decimal(10, 2)
+  borrowPrice      Decimal        @db.Decimal(10, 2)
+  copiesSeeded     Int
+  copiesAvailable  Int
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  bookTags         BookTag[]
+  actions          BookAction[]
+  borrows          Borrow[]
+  movements        WalletMovement[]
+
+  @@index([title])
+}
+
+model Wallet {
+  id                   Int               @id @default(1)
+  balance              Decimal           @db.Decimal(12, 2)
+  milestoneNotifiedAt  DateTime?
+
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
+
+  movements            WalletMovement[]
+}
+
+model WalletMovement {
+  id        Int                @id @default(autoincrement())
+  walletId  Int                @default(1)
+  type      WalletMovementType
+  direction MovementDirection
+  amount    Decimal            @db.Decimal(12, 2)
+  note      String?
+  bookId    Int?
+  userId    Int?
+  createdAt DateTime           @default(now())
+
+  wallet Wallet @relation(fields: [walletId], references: [id])
+  book   Book?  @relation(fields: [bookId], references: [id])
+  user   User?  @relation(fields: [userId], references: [id])
+
+  @@index([createdAt])
+  @@index([type])
+}
+
+model BookAction {
+  id           Int            @id @default(autoincrement())
+  type         BookActionType
+  bookId       Int
+  userId       Int?
+  quantity     Int            @default(1)
+  pricePerUnit Decimal?       @db.Decimal(10, 2)
+  total        Decimal?       @db.Decimal(12, 2)
+  dueAt        DateTime?
+  meta         Json?
+  createdAt    DateTime       @default(now())
+
+  book Book  @relation(fields: [bookId], references: [id])
+  user User? @relation(fields: [userId], references: [id])
+
+  @@index([bookId, type, createdAt])
+  @@index([userId, type, createdAt])
+}
+
+model Borrow {
+  id            Int          @id @default(autoincrement())
+  userId        Int
+  bookId        Int
+  quantity      Int          @default(1)
+  borrowedAt    DateTime     @default(now())
+  dueAt         DateTime
+  returnedAt    DateTime?
+  priceAtBorrow Decimal      @db.Decimal(10, 2)
+  status        BorrowStatus @default(BORROWED)
+
+  user User @relation(fields: [userId], references: [id])
+  book Book @relation(fields: [bookId], references: [id])
+
+  @@index([userId, status])
+  @@index([bookId, status])
+}
+
+model Tag {
+  id    Int     @id @default(autoincrement())
+  name  String
+  kind  TagKind
+
+  bookTags BookTag[]
+
+  @@unique([name, kind])
+}
+
+model BookTag {
+  bookId    Int
+  tagId     Int
+  tagOrder  Int?
+
+  book Book @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([bookId, tagId])
+  @@index([tagId])
+}

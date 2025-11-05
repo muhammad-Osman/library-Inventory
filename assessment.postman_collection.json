@@ -1,0 +1,336 @@
+{
+	"info": {
+		"_postman_id": "ea45e9e7-9388-45c3-8222-127aeb0ec473",
+		"name": "assessment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44680288"
+	},
+	"item": [
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "Actions done on a book",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7000/api/admin/books/1/actions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"api",
+								"admin",
+								"books",
+								"1",
+								"actions"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "BORROW,RETURN",
+									"disabled": true
+								},
+								{
+									"key": "from",
+									"value": "2025-01-01",
+									"disabled": true
+								},
+								{
+									"key": "to",
+									"value": "2025-12-31",
+									"disabled": true
+								},
+								{
+									"key": "userEmail",
+									"value": "alice@x.com",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "10",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin - Search Books",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7000/api/admin/books/search?page=2&pageSize=20&q=A Confederacy of Dunces",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"api",
+								"admin",
+								"books",
+								"search"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2"
+								},
+								{
+									"key": "pageSize",
+									"value": "20"
+								},
+								{
+									"key": "q",
+									"value": "A Confederacy of Dunces"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Wallet Balance",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7000/api/admin/wallet",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"api",
+								"admin",
+								"wallet"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Wallet movements",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7000/api/admin/wallet/movements?type=BORROW_REVENUE",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"api",
+								"admin",
+								"wallet",
+								"movements"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "BORROW_REVENUE,SELL_REVENUE",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "20",
+									"disabled": true
+								},
+								{
+									"key": "type",
+									"value": "BORROW_REVENUE"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin Get User Books",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7000/api/admin/users/alice@example.com/books",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"api",
+								"admin",
+								"users",
+								"alice@example.com",
+								"books"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "User Borrow Book",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-user-email",
+								"value": "alice@example.com"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"bookId\":1}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7000/api/user/borrow",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"api",
+								"user",
+								"borrow"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Return Book",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-user-email",
+								"value": "alice@example.com"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"bookId\":1}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7000/api/user/return",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"api",
+								"user",
+								"return"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Book Buy (Bonus)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-user-email",
+								"value": "alice@example.com"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"bookId\": 1,\n    \"quantity\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7000/api/user/buy",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"api",
+								"user",
+								"buy"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

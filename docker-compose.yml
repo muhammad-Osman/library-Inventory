@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: library
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: production
+      PORT: 7000
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/library?schema=public
+      RESEND_API_KEY: ${RESEND_API_KEY}
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "7000:7000"
+
+volumes:
+  pgdata:
