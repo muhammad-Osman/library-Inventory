@@ -1,6 +1,6 @@
 # Assessment
 
-## How to run backend
+## How to run backend on local and below is how to start backend with docker
 
 ### Step 1
 - Create database in postgres
