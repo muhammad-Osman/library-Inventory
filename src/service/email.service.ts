@@ -1,4 +1,3 @@
-// src/service/email.service.ts
 import { Resend } from 'resend';
 import type { CreateEmailOptions } from 'resend';
 
